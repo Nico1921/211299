@@ -1,0 +1,58 @@
+#include "DriveInfo.au3"
+#Include <Array.au3>
+
+Global $sInfo = ""
+
+GUICreate("_DriveGetDiskDrive", 800, 600)
+$LIST = GUICtrlCreateListView("Info|Type", 0, 0, 800, 600)
+GUISetState()
+
+Dim $aDiskDrive
+_DriveGetDiskDrive($aDiskDrive)
+
+
+For $i = 1 To $aDiskDrive[0][0]
+
+    GUICtrlCreateListViewItem("Caption|"&$aDiskDrive[$i][4],$LIST)
+    GUICtrlCreateListViewItem("InterfaceType|"&$aDiskDrive[$i][17],$LIST)
+	GUICtrlCreateListViewItem("Size|"&$aDiskDrive[$i][39]/1024/1024/1024,$LIST)
+    GUICtrlCreateListViewItem("Status|"&$aDiskDrive[$i][40],$LIST)
+    GUICtrlCreateListViewItem("StatusInfo|"&_DriveTranslateStatusInfo($aDiskDrive[$i][41]),$LIST)
+    GUICtrlCreateListViewItem("SystemCreationClassName|"&$aDiskDrive[$i][42],$LIST)
+    GUICtrlCreateListViewItem("SystemName|"&$aDiskDrive[$i][43],$LIST)
+    GUICtrlCreateListViewItem("TotalCylinders|"&$aDiskDrive[$i][44],$LIST)
+    GUICtrlCreateListViewItem("TotalHeads|"&$aDiskDrive[$i][45],$LIST)
+    GUICtrlCreateListViewItem("TotalSectors|"&$aDiskDrive[$i][46],$LIST)
+    GUICtrlCreateListViewItem("TotalTracks|"&$aDiskDrive[$i][47],$LIST)
+    GUICtrlCreateListViewItem("TracksPerCylinder|"&$aDiskDrive[$i][48],$LIST)
+
+    LogIt("Drive " & $i & ": Drive "&$i)
+    LogIt("")
+    LogIt("Caption: " & $aDiskDrive[$i][4])
+    LogIt("InterfaceType: " & $aDiskDrive[$i][17])
+	LogIt("Size: " & $aDiskDrive[$i][39])
+    LogIt("Status: " & $aDiskDrive[$i][40])
+    LogIt("StatusInfo: " & _DriveTranslateStatusInfo($aDiskDrive[$i][41]))
+    LogIt("SystemCreationClassName: " & $aDiskDrive[$i][42])
+    LogIt("SystemName: " & $aDiskDrive[$i][43])
+    LogIt("TotalCylinders: " & $aDiskDrive[$i][44])
+    LogIt("TotalHeads: " & $aDiskDrive[$i][45])
+    LogIt("TotalSectors: " & $aDiskDrive[$i][46])
+    LogIt("TotalTracks: " & $aDiskDrive[$i][47])
+    LogIt("TracksPerCylinder: " & $aDiskDrive[$i][48])
+    LogIt("")
+Next
+ConsoleWrite($sInfo & @CRLF)
+Local $file = FileOpen(@ScriptDir & "\drives.log", 2)
+If $file = -1 Then Exit  MsgBox(0, "Error", "Unable to open file " & @ScriptDir & "\drives.log")
+FileWrite($file, $sInfo)
+FileClose($file)
+
+While GUIGetMsg() <> -3
+    Sleep(10)
+WEnd
+
+
+Func LogIt($sText)
+    $sInfo &= $sText & @CRLF
+EndFunc
