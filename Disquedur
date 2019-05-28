@@ -16,9 +16,12 @@ Dim $aDiskDrive
 _DriveGetDiskDrive($aDiskDrive)
 
 For $i = 1 To $aDiskDrive[0][0]
-
-    $nameDisk = $aDiskDrive[$i][4];
 	$sizeDisk = $aDiskDrive[$i][39];
 	$sizeDisk = Round($sizeDisk, 0);
+	if (StringLen ($sizeDisk) = 12) Then
+		$sizeDisk = StringMid($sizeDisk, 1, 3);
+	ElseIf (StringLen ($sizeDisk) = 11) Then
+		$sizeDisk = StringMid($sizeDisk, 1, 2);
+	EndIf
 	MsgBox(1, "Taille disque", $sizeDisk & "Gb");
 Next
